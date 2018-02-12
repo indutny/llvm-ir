@@ -1,0 +1,33 @@
+{
+  "name": "llvm-ir",
+  "version": "1.0.0",
+  "description": "LLVM IR generator",
+  "main": "lib/llvm.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "lint": "eslint test/*.js lib/*.js lib/**/*.js lib/**/**/*.js",
+    "test": "mocha --reporter=spec test/*-test.js && npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/indutny/llvm-ir.git"
+  },
+  "keywords": [
+    "llvm",
+    "ir",
+    "intermediate",
+    "representation"
+  ],
+  "author": "Fedor Indutny <fedor@indutny.com> (http://darksi.de/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/indutny/llvm-ir/issues"
+  },
+  "homepage": "https://github.com/indutny/llvm-ir#readme",
+  "devDependencies": {
+    "eslint": "^4.17.0",
+    "mocha": "^5.0.0"
+  }
+}
