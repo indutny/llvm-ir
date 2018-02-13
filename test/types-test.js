@@ -24,6 +24,10 @@ describe('IR/types', () => {
       assert.strictEqual(ir.i(8).ptr().type, 'i8*');
     });
 
+    it('should have `.array()`', () => {
+      assert.strictEqual(ir.i(8).array(8).type, '[8 x i8]');
+    });
+
     it('should create values', () => {
       const i8 = ir.i(8);
       const v = i8.v(1);
