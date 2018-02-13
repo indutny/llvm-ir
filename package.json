@@ -1,6 +1,6 @@
 {
   "name": "llvm-ir",
-  "version": "1.0.0-beta1",
+  "version": "1.0.0-beta2",
   "description": "LLVM IR generator",
   "main": "lib/llvm.js",
   "directories": {
