@@ -15,7 +15,14 @@ describe('IR/Serializer', () => {
   });
 
   it('should serialize string', () => {
-    // TODO(indutny): implement me
+    const str = ir.cstr('hello');
+
+    const use = ir._('something', [ str.type, str ]);
+    assert.strictEqual(s.instruction(use),
+      '%i0 = something [6 x i8]* @.cstr0');
+
+    assert.strictEqual(ir.build(),
+      '@.cstr0 = private unnamed_addr constant [6 x i8] c"hello\\00"\n');
   });
 
   it('should serialize struct', () => {
@@ -28,7 +35,7 @@ describe('IR/Serializer', () => {
       '%state = type {',
       '  i32, ; 0 => "hello"',
       '  i8* ; 1 => "world"',
-      '}\n'
+      '}'
     ].join('\n'));
   });
 
@@ -54,7 +61,7 @@ describe('IR/Serializer', () => {
       '  br label %b0',
       'b0:',
       '  ret i32 %i1',
-      '}\n'
+      '}'
     ].join('\n'));
   });
 });
