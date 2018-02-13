@@ -45,6 +45,7 @@ describe('IR/Serializer', () => {
     const fn = ir.fn(sig, 'fn', [ 'p' ]);
 
     fn.visibility = 'internal';
+    fn.attributes = 'alwaysinline';
 
     const add = ir._('add', [ i32, i32.v(1) ], fn.arg('p'));
     const add2 = ir._('add', [ i32, add ], add);
@@ -56,7 +57,7 @@ describe('IR/Serializer', () => {
     target.terminate('ret', [ i32, add2 ]);
 
     assert.strictEqual(s.function(fn), [
-      'define internal i32 @fn(i32 %p) {',
+      'define internal i32 @fn(i32 %p) alwaysinline {',
       '  %i0 = add i32 1, %p',
       '  %i1 = add i32 %i0, %i0',
       '  br i32* @global_int, label %b0',
