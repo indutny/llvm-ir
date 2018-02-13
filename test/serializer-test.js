@@ -54,6 +54,8 @@ describe('IR/Serializer', () => {
 
     const ref = ir.ref(i32, 'global_int');
     const target = fn.body.jump('br', [ ref.type, ref ]);
+
+    target.push(ir.comment('return'));
     target.terminate('ret', [ i32, add2 ]);
 
     assert.strictEqual(s.function(fn), [
@@ -62,6 +64,7 @@ describe('IR/Serializer', () => {
       '  %i1 = add i32 %i0, %i0',
       '  br i32* @global_int, label %b0',
       'b0:',
+      '  ; return',
       '  ret i32 %i1',
       '}'
     ].join('\n'));
