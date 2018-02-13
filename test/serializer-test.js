@@ -51,14 +51,15 @@ describe('IR/Serializer', () => {
 
     fn.body.push([ add, add2 ]);
 
-    const target = fn.body.jump('br');
+    const ref = ir.ref(i32, 'global_int');
+    const target = fn.body.jump('br', [ ref.type, ref ]);
     target.terminate('ret', [ i32, add2 ]);
 
     assert.strictEqual(s.function(fn), [
       'define internal i32 @fn(i32 %p) {',
       '  %i0 = add i32 1, %p',
       '  %i1 = add i32 %i0, %i0',
-      '  br label %b0',
+      '  br i32* @global_int, label %b0',
       'b0:',
       '  ret i32 %i1',
       '}'
