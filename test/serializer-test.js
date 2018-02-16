@@ -29,7 +29,7 @@ describe('IR/Serializer', () => {
     const i8ptr = ir.i(8).ptr();
 
     const bitcast =
-      ir._('bitcast', [ i8ptr, ir.ref(i8ptr, 's'), 'to', ir.i(16).ptr() ]);
+      ir._('bitcast', [ i8ptr, i8ptr.ref('s'), 'to', ir.i(16).ptr() ]);
     assert.strictEqual(s.instruction(bitcast), '%i0 = bitcast i8* @s to i16*');
   });
 
@@ -71,7 +71,7 @@ describe('IR/Serializer', () => {
 
     fn.body.push([ add, add2 ]);
 
-    const ref = ir.ref(i32, 'global_int');
+    const ref = i32.ref('global_int');
     const target = fn.body.jump('br', [ ref.type, ref ]);
 
     target.push(ir.comment('return'));
