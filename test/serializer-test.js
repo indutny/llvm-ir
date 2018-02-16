@@ -73,19 +73,26 @@ describe('IR/Serializer', () => {
     fn.body.push([ add, add2 ]);
 
     const ref = i32.ref('global_int');
-    const target = fn.body.jump('br', [ ref.type, ref ]);
+    const targets = fn.body.terminate('br', [ ref.type, ref ],
+      ir.label(), ir.label());
 
-    target.push(ir.comment('return'));
-    target.terminate('ret', [ i32, add2 ]);
+    targets[0].push(ir.comment('return'));
+    targets[0].terminate('ret', [ i32, add2 ]);
+
+    targets[1].push(ir.comment('return'));
+    targets[1].terminate('ret', [ i32, add ]);
 
     assert.strictEqual(s.function(fn), [
       'define internal i32 @fn(i32 %p) alwaysinline {',
       '  %i0 = add i32 1, %p',
       '  %i1 = add i32 %i0, %i0',
-      '  br i32* @global_int, label %b0',
+      '  br i32* @global_int, label %b0, label %b1',
       'b0:',
       '  ; return',
       '  ret i32 %i1',
+      'b1:',
+      '  ; return',
+      '  ret i32 %i0',
       '}'
     ].join('\n'));
   });
