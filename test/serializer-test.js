@@ -25,6 +25,14 @@ describe('IR/Serializer', () => {
       '@.cstr0 = private unnamed_addr constant [6 x i8] c"hello\\00"\n');
   });
 
+  it('should serialize raw string in instruction', () => {
+    const i8ptr = ir.i(8).ptr();
+
+    const bitcast =
+      ir._('bitcast', [ i8ptr, ir.ref(i8ptr, 's'), 'to', ir.i(16).ptr() ]);
+    assert.strictEqual(s.instruction(bitcast), '%i0 = bitcast i8* @s to i16*');
+  });
+
   it('should serialize struct', () => {
     const state = ir.struct('state');
 
