@@ -2,6 +2,7 @@
 /* global describe it beforeEach */
 
 const assert = require('assert');
+const Buffer = require('buffer').Buffer;
 
 const IR = require('../');
 const Serializer = require('../lib/llvm/').Serializer;
@@ -23,6 +24,17 @@ describe('IR/Serializer', () => {
 
     assert.strictEqual(ir.build(),
       '@.cstr0 = private unnamed_addr constant [6 x i8] c"hello\\00"\n');
+  });
+
+  it('should serialize data', () => {
+    const str = ir.data(Buffer.from('hello\f'));
+
+    const use = ir._('something', [ str.type, str ]);
+    assert.strictEqual(s.instruction(use),
+      '%i0 = something [6 x i8]* @.data0');
+
+    assert.strictEqual(ir.build(),
+      '@.data0 = private unnamed_addr constant [6 x i8] c"hello\\0c"\n');
   });
 
   it('should serialize raw string in instruction', () => {
