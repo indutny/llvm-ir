@@ -74,7 +74,7 @@ describe('IR/Serializer', () => {
 
     const ref = i32.ref('global_int');
     const targets = fn.body.terminate('br', [ ref.type, ref ],
-      ir.label(), ir.label());
+      ir.label('left'), ir.label('right'));
 
     targets[0].push(ir.comment('return'));
     targets[0].terminate('ret', [ i32, add2 ]);
@@ -86,11 +86,11 @@ describe('IR/Serializer', () => {
       'define internal i32 @fn(i32 %p) alwaysinline {',
       '  %i0 = add i32 1, %p',
       '  %i1 = add i32 %i0, %i0',
-      '  br i32* @global_int, label %b0, label %b1',
-      'b0:',
+      '  br i32* @global_int, label %b0_left, label %b1_right',
+      'b0_left:',
       '  ; return',
       '  ret i32 %i1',
-      'b1:',
+      'b1_right:',
       '  ; return',
       '  ret i32 %i0',
       '}'
