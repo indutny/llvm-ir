@@ -129,4 +129,17 @@ describe('IR/Serializer', () => {
       '}'
     ].join('\n'));
   });
+
+  it('should function param attributes', () => {
+    const sig = ir.signature(ir.void(), [ [ ir.i(32), 'noalias' ] ]);
+    const fn = ir.fn(sig, 'fn', [ 'x' ]);
+
+    fn.body.terminate('ret', ir.void());
+
+    assert.strictEqual(s.function(fn), [
+      'define void @fn(i32 noalias %x) {',
+      '  ret void',
+      '}'
+    ].join('\n'));
+  });
 });
