@@ -66,9 +66,10 @@ describe('IR/Serializer', () => {
 
     const decl = ir.declare(sig, 'ext');
     decl.attributes = 'nounwind';
+    decl.cconv = 'cc 11';
 
     assert.strictEqual(s.declaration(decl),
-      'declare i32 @ext(i32, i32) nounwind');
+      'declare cc 11 i32 @ext(i32, i32) nounwind');
   });
 
   it('should serialize function', () => {
@@ -77,6 +78,7 @@ describe('IR/Serializer', () => {
     const fn = ir.fn(sig, 'fn', [ 'p' ]);
 
     fn.visibility = 'internal';
+    fn.cconv = 'fastcc';
     fn.attributes = 'alwaysinline';
 
     const add = ir._('add', [ i32, i32.v(1) ], fn.arg('p'));
@@ -95,7 +97,7 @@ describe('IR/Serializer', () => {
     targets[1].terminate('ret', [ i32, add ]);
 
     assert.strictEqual(s.function(fn), [
-      'define internal i32 @fn(i32 %p) alwaysinline {',
+      'define internal fastcc i32 @fn(i32 %p) alwaysinline {',
       '  %i0 = add i32 1, %p',
       '  %i1 = add i32 %i0, %i0',
       '  br i32* @global_int, label %b0_left, label %b1_right',
