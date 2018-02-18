@@ -108,4 +108,22 @@ describe('IR/Serializer', () => {
       '}'
     ].join('\n'));
   });
+
+  it('should serialize struct value', () => {
+    const state = ir.struct('state');
+
+    state.field(ir.i(32), 'hello');
+    state.field(ir.i(8).ptr(), 'world');
+
+    const sig = ir.signature(state, []);
+    const fn = ir.fn(sig, 'fn', []);
+
+    fn.body.terminate('ret', [ state, state.v({ hello: 123, world: null}) ]);
+
+    assert.strictEqual(s.function(fn), [
+      'define %state @fn() {',
+      '  ret %state { i32 123, i8* null }',
+      '}'
+    ].join('\n'));
+  });
 });
