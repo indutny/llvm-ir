@@ -119,21 +119,15 @@ describe('IR/Serializer', () => {
 
     state.field(ir.i(32), 'hello');
     state.field(sig.ptr(), 'world');
-    state.field(ir.i(32).ptr(), 'and');
-
-    const others = ir._('others');
-    fn.body.push(others);
 
     fn.body.terminate('ret', [ state, state.v({
       hello: 123,
-      world: fn.ref(),
-      and: others
+      world: fn.ref()
     }) ]);
 
     assert.strictEqual(s.function(fn), [
       'define %state @fn() {',
-      '  %i0 = others',
-      '  ret %state { i32 123, %state ()* @fn, i32* %i0 }',
+      '  ret %state { i32 123, %state ()* @fn }',
       '}'
     ].join('\n'));
   });
