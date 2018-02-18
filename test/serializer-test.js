@@ -142,4 +142,23 @@ describe('IR/Serializer', () => {
       '}'
     ].join('\n'));
   });
+
+  it('should beautify function params', () => {
+    const t = [ ir.i(32), 'long attribute list' ];
+    const sig = ir.signature(ir.void(), [ t, t, t, t, t ]);
+    const fn = ir.fn(sig, 'fn', [ 'a', 'b', 'c', 'd', 'e' ]);
+
+    fn.body.terminate('ret', ir.void());
+
+    assert.strictEqual(s.function(fn), [
+      'define void @fn(',
+      '    i32 long attribute list %a,',
+      '    i32 long attribute list %b,',
+      '    i32 long attribute list %c,',
+      '    i32 long attribute list %d,',
+      '    i32 long attribute list %e) {',
+      '  ret void',
+      '}'
+    ].join('\n'));
+  });
 });
