@@ -12,6 +12,10 @@ describe('IR/types', () => {
   });
 
   describe('int', () => {
+    it('should pass `.isInt()`', () => {
+      assert(ir.i(8).isInt());
+    });
+
     it('should have `.width`', () => {
       assert.strictEqual(ir.i(8).width, 8);
     });
@@ -45,6 +49,10 @@ describe('IR/types', () => {
   });
 
   describe('void', () => {
+    it('should pass `.isVoid()`', () => {
+      assert(ir.void().isVoid());
+    });
+
     it('should have `.type`', () => {
       assert.strictEqual(ir.void().type, 'void');
     });
@@ -55,6 +63,10 @@ describe('IR/types', () => {
   });
 
   describe('struct', () => {
+    it('should pass `.isStruct()`', () => {
+      assert(ir.struct('state').isStruct());
+    });
+
     it('should have `.type`', () => {
       assert.strictEqual(ir.struct('state').type, '%state');
     });
@@ -78,6 +90,10 @@ describe('IR/types', () => {
   });
 
   describe('signature', () => {
+    it('should pass `.signature()`', () => {
+      assert(ir.signature(ir.i(8), []).isSignature());
+    });
+
     it('should have `.type`', () => {
       const s = ir.signature(ir.i(8), [ ir.i(8).ptr(), ir.i(64) ]);
       assert.strictEqual(s.type, 'i8 (i8*, i64)');
