@@ -22,8 +22,8 @@ describe('IR/Serializer', () => {
     assert.strictEqual(s.instruction(use),
       '%i0 = something [8 x i8]* @.cstr0');
 
-    assert.strictEqual(ir.build(),
-      '@.cstr0 = private unnamed_addr constant [8 x i8] c"hello\\"\\\\\\00"\n');
+    assert.strictEqual(ir.build(), '@.cstr0 = private unnamed_addr constant ' +
+      '[8 x i8] c"hello\\22\\5c\\00"\n');
   });
 
   it('should serialize data', () => {
