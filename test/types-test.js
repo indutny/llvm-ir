@@ -87,6 +87,31 @@ describe('IR/types', () => {
       assert.equal(state.lookup('hello'), kHello);
       assert.equal(state.lookup('world'), kWorld);
     });
+
+    it('should support anonymous mode', () => {
+      const state = ir.struct([
+        [ ir.i(32), 'hello' ],
+        [ ir.i(8).ptr(), 'world' ]
+      ]);
+
+      assert.equal(state.lookup('hello'), 0);
+      assert.equal(state.lookup('world'), 1);
+      assert.equal(state.type, '{ i32, i8* }');
+    });
+
+    it('should return cached anonymous struct', () => {
+      const state = ir.struct([
+        [ ir.i(32), 'hello' ],
+        [ ir.i(8).ptr(), 'world' ]
+      ]);
+
+      const cached = ir.struct([
+        [ ir.i(32), 'hello' ],
+        [ ir.i(8).ptr(), 'world' ]
+      ]);
+
+      assert.strictEqual(state, cached);
+    });
   });
 
   describe('signature', () => {
