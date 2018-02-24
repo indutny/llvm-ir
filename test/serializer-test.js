@@ -60,16 +60,32 @@ describe('IR/Serializer', () => {
     ].join('\n'));
   });
 
-  it('should serialize declaration', () => {
-    const i32 = ir.i(32);
-    const sig = ir.signature(i32, [ i32, i32 ]);
+  describe('`.declare()`', () => {
+    it('should serialize declaration', () => {
+      const i32 = ir.i(32);
+      const sig = ir.signature(i32, [ i32, i32 ]);
 
-    const decl = ir.declare(sig, 'ext');
-    decl.attributes = 'nounwind';
-    decl.cconv = 'cc 11';
+      const decl = ir.declare(sig, 'ext');
+      decl.attributes = 'nounwind';
+      decl.cconv = 'cc 11';
 
-    assert.strictEqual(s.declaration(decl),
-      'declare cc 11 i32 @ext(i32, i32) nounwind');
+      assert.strictEqual(s.declaration(decl),
+        'declare cc 11 i32 @ext(i32, i32) nounwind');
+    });
+
+    it('should ignore duplicate declarations', () => {
+      const i32 = ir.i(32);
+      const sig = ir.signature(i32, [ i32, i32 ]);
+
+      const decl = ir.declare(sig, 'ext');
+      decl.attributes = 'nounwind';
+      decl.cconv = 'cc 11';
+
+      ir.declare(sig, 'ext');
+
+      assert.strictEqual(ir.build(),
+        '\ndeclare cc 11 i32 @ext(i32, i32) nounwind\n');
+    });
   });
 
   it('should serialize function', () => {

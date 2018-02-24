@@ -103,5 +103,26 @@ describe('IR/types', () => {
       const s = ir.signature(ir.i(8), [ ir.i(8).ptr(), ir.i(64).ptr() ]);
       assert.strictEqual(s.ptr().type, 'i8 (i8*, i64*)*');
     });
+
+    describe('`.isEqual()`', () => {
+      it('should check argument count', () => {
+        assert(!ir.signature(ir.i(8), []).isEqual(
+          ir.signature(ir.i(8), [ ir.i(8) ])));
+      });
+
+      it('should check return type', () => {
+        assert(!ir.signature(ir.i(8), []).isEqual(ir.signature(ir.i(16), [])));
+      });
+
+      it('should check argument types', () => {
+        assert(ir.signature(ir.i(8), [ ir.i(8) ]).isEqual(
+          ir.signature(ir.i(8), [ ir.i(8) ])));
+      });
+
+      it('should ignore argument attributes', () => {
+        assert(ir.signature(ir.i(8), [ ir.i(8) ]).isEqual(
+          ir.signature(ir.i(8), [ [ ir.i(8), 'attr' ] ])));
+      });
+    });
   });
 });
