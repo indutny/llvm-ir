@@ -37,6 +37,14 @@ describe('IR/Serializer', () => {
       '@.data0 = private unnamed_addr constant [6 x i8] c"hello\\0c"\n');
   });
 
+  it('should serialize metadata', () => {
+    const m = ir.metadata('i32 1');
+    const m2 = ir.metadata('i32 1');
+    assert.strictEqual(m, m2);
+
+    assert.strictEqual(ir.build(), '!0 = !{i32 1}\n');
+  });
+
   it('should serialize raw string in instruction', () => {
     const i8 = ir.i(8);
 
@@ -84,7 +92,7 @@ describe('IR/Serializer', () => {
       ir.declare(sig, 'ext');
 
       assert.strictEqual(ir.build(),
-        '\ndeclare cc 11 i32 @ext(i32, i32) nounwind\n');
+        'declare cc 11 i32 @ext(i32, i32) nounwind\n');
     });
   });
 
