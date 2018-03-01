@@ -22,7 +22,7 @@ describe('IR/Serializer', () => {
     assert.strictEqual(s.instruction(use),
       '%i0 = something [8 x i8]* @.cstr0');
 
-    assert.strictEqual(ir.build(), '@.cstr0 = private unnamed_addr constant ' +
+    assert.strictEqual(ir.build(), '@.cstr0 = internal unnamed_addr constant ' +
       '[8 x i8] c"hello\\22\\5c\\00"\n');
   });
 
@@ -34,7 +34,7 @@ describe('IR/Serializer', () => {
       '%i0 = something [6 x i8]* @.data0');
 
     assert.strictEqual(ir.build(),
-      '@.data0 = private unnamed_addr constant [6 x i8] c"hello\\0c"\n');
+      '@.data0 = internal unnamed_addr constant [6 x i8] c"hello\\0c"\n');
   });
 
   it('should serialize metadata', () => {
