@@ -37,6 +37,21 @@ describe('IR/Serializer', () => {
       '@.data0 = internal unnamed_addr constant [6 x i8] c"hello\\0c"\n');
   });
 
+  it('should serialize array', () => {
+    const arr = ir.array(ir.i(32).array(5), [ 1, 2, 3, 4, 5 ]);
+
+    const use = ir._('something', [ arr.type, arr ]);
+    assert.strictEqual(s.instruction(use),
+      '%i0 = something [5 x i32]* @.arr0');
+
+    const use2 = ir._('something', [ ir.i(32).array(5).v([ 1, 2, 3, 4, 5 ]) ]);
+    assert.strictEqual(s.instruction(use2),
+      '%i1 = something [ i32 1, i32 2, i32 3, i32 4, i32 5 ]');
+
+    assert.strictEqual(ir.build(), '@.arr0 = internal unnamed_addr constant ' +
+      '[5 x i32] [ i32 1, i32 2, i32 3, i32 4, i32 5 ]\n');
+  });
+
   it('should serialize metadata', () => {
     const m = ir.metadata('i32 1');
     const m2 = ir.metadata('i32 1');
